@@ -39,7 +39,7 @@ function Kotak() {
   return (
     <>
       <div className="grid grid-col">
-
+        tes
       </div>
     </>
   );
