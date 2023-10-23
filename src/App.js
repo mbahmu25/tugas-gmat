@@ -2,12 +2,22 @@ import "./App.css";
 import { useEffect, useState } from "react";
 import { Chart as ChartJS } from "chart.js/auto";
 import { Line } from "react-chartjs-2";
+import { Wrapper, Status } from "@googlemaps/react-wrapper";
+import { MapContainer, TileLayer } from "react-leaflet";
+import Map from "./Map";
 var daftar = 10;
 
 function App() {
+  const pos = [51.2, 51];
   return (
     <div className="p-[20px]">
       <Judul />
+      <div className="h-fit">
+        <div className="grid grid-col-2 gap-[20px] grid-flow-col">
+          <Map />
+          <Grafik teks="4" cs="4" />
+        </div>
+      </div>
       <Kotak />
     </div>
   );
@@ -25,24 +35,15 @@ function Judul() {
 function Kotak() {
   return (
     <>
-      <div className="grid grid-cols-3 gap-[20px] mt-[25px]">
-        <Gridbox T="1" />
-        <Gridbox T="2" />
-        <Gridbox T="3" />
+      <div className="grid grid-cols-3 gap-[20px] grid-flow-col mt-[25px] ">
+        <Grafik teks="1" cs="4  " />
+        <Grafik teks="3" cs="4" />
+        <Grafik teks="2" cs="4" />
       </div>
     </>
   );
 }
-function Gridbox({ T }) {
-  return (
-    <>
-      <div className="border border-black rounded-md">
-        <Grafik teks={T} />
-      </div>
-    </>
-  );
-}
-function Grafik({ teks }) {
+function Grafik({ teks, cs }) {
   const [datas, tambah] = useState([]);
   const [y, Yval] = useState([]);
   const [i, hit] = useState(0);
@@ -63,7 +64,7 @@ function Grafik({ teks }) {
   }, []);
   console.log(data[0], y);
   return (
-    <div>
+    <div className={"border border-black rounded-md h-fit "}>
       <Line
         data={{
           labels: y.slice(-10),
@@ -73,6 +74,9 @@ function Grafik({ teks }) {
               data: datas.slice(-10),
             },
           ],
+          options: {
+            bezierCurve: true,
+          },
         }}
       />
     </div>
