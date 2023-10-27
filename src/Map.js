@@ -3,14 +3,11 @@ import "./App.css";
 import { useEffect, useState } from "react";
 import { MapContainer, TileLayer, Circle } from "react-leaflet";
 
-export default function Map({lat, lon}) {
-  var pos = [-7.769940,110.376276]
-
+export default function Map({ lat, lon, pos}) {
   return (
     <>
       <div>
-        <h1 className="text-xl">GPS</h1>latitude: {lat} longitude:{" "}
-        {lon}
+        <h1 className="text-xl">GPS</h1>latitude: {lat} longitude: {lon}
       </div>
       <br />
       <MapContainer center={pos} zoom={13} scrollWheelZoom={true}>
@@ -19,7 +16,7 @@ export default function Map({lat, lon}) {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
         <Circle
-          center={[lat,lon]}
+          center={[lat, lon]}
           radius={80}
           fillColor="red"
           color="red"

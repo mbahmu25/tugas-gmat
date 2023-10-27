@@ -5,11 +5,7 @@ import { Line } from "react-chartjs-2";
 import Map from "./Map";
 import { io } from "socket.io-client";
 
-var daftar = 10;
-
-function ubah(arg) {
-  return [arg[1], parseFloat(arg[2])];
-}
+var range = 20
 function App() {
   const socket = io("https://gmat.haikalhilmi.my.id/");
   const [wkt, setwkt] = useState([]);
@@ -39,49 +35,46 @@ function App() {
       setalt((old) => [...old, msg.split(",")[9].split(";")[0]])
     );
   }, []);
-
-  const pos = [51.2, 51];
-  return (
-    <div className="p-[20px] bg-red">
-      {/* {data} */}
-      <div className="App mb-[20px]">
-        <h1 className="text-3xl font-bold">PENUGASAN GMAT</h1>
-        <h1 className="text-xl">Nicholas Genta Setiawan Gunawan</h1>
-        <h1 className="text-xl">22/504443/TK/55176</h1>
-      </div>
-      <div className="grid grid-cols-12 gap-[20px] grid-flow-col">
-        <div className="grid bg-gray-100 rounded-md col-span-8 pr-5 pl-5 pt-5 pb-5  ">
-          <Map lat={lat} lon={lon} />
+  if (wkt.length >0) {
+    var fixed_lat = lat;
+    var fixed_lon = lon;
+    return (
+      <div className="p-[20px] bg-red">
+        <div className="App mb-[20px]">
+          <h1 className="text-3xl font-bold">PENUGASAN GMAT</h1>
+          <h1 className="text-xl">Nicholas Genta Setiawan Gunawan</h1>
+          <h1 className="text-xl">22/504443/TK/55176</h1>
         </div>
-        <div className="bg-gray-100 rounded-md col-span-4 h-fit ">
-          <Grafik3 data1={omg} data2={phi} data3={kap} x={wkt} />
+        <div className="grid grid-cols-12 gap-[20px] grid-flow-col">
+          <div className="grid bg-gray-100 rounded-md col-span-8 pr-5 pl-5 pt-5 pb-5  ">
+            <Map lat={lat} lon={lon} pos={[fixed_lat, fixed_lon]} />
+          </div>
+          <div className="bg-gray-100 rounded-md col-span-4 h-fit ">
+            <Grafik3 data1={omg} data2={phi} data3={kap} x={wkt} />
+          </div>
+        </div>
+        <div className="grid grid-cols-3 gap-[20px] grid-flow-col mt-[25px] ">
+          <Grafik teks="Voltage" dataGraph={volt} x={wkt} />
+          <Grafik teks="Pressure" dataGraph={pres} x={wkt} />
+          <Grafik teks="Altitude" dataGraph={alt} x={wkt} />
         </div>
       </div>
-      <div className="grid grid-cols-3 gap-[20px] grid-flow-col mt-[25px] ">
-        <Grafik teks="1" dataGraph={volt} x={wkt} />
-        <Grafik teks="1" dataGraph={pres} x={wkt} />
-        <Grafik teks="1" dataGraph={alt} x={wkt} />
-      </div>
-    </div>
-  );
+    );
+  }
 }
 function Grafik({ teks, dataGraph, x }) {
   return (
     <div className={"rounded-md h-fit bg-gray-100 pr-5 pl-5 pt-5 pb-3"}>
       <Line
         data={{
-          labels: x.slice(-10),
+          labels: x.slice(-range),
           datasets: [
             {
               label: teks,
-              data: dataGraph.slice(-10),
+              data: dataGraph.slice(-range),
               tension: 0.4,
             },
-          ],
-
-          options: {
-            animation: false,
-          },
+          ]
         }}
       />
     </div>
@@ -92,35 +85,30 @@ function Grafik3({ x, data1, data2, data3 }) {
     <div className={"mr-5 ml-5 mt-5 mb-2"}>
       <Line
         data={{
-          labels: x.slice(-10),
+          labels: x.slice(-range),
           datasets: [
             {
               label: "yaw",
-              data: data1.slice(-10),
+              data: data1.slice(-range),
               borderColor: "red",
               tension: 0.4,
             },
             {
               label: "pitch",
-              data: data2.slice(-10),
+              data: data2.slice(-range),
               borderColor: "yellow",
               tension: 0.4,
             },
             {
               label: "roll",
-              data: data3.slice(-10),
+              data: data3.slice(-range),
               borderColor: "blue",
               tension: 0.4,
             },
-          ],
-          options: {
-            animation: false,
-          },
+          ]
         }}
       />
     </div>
   );
 }
 export default App;
-// pelajari grid di tailwinds
-// peljari class components
